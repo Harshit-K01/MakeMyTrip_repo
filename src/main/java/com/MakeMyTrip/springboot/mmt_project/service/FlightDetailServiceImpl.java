@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +31,9 @@ public class FlightDetailServiceImpl implements FlightDetailService{
     }
 
     @Override
-    public List<FlightDetail> findFlight(String source, String destination, Date departDay) {
+    public List<Object> findFlight(String source, String destination, LocalDate departDay, String classType) {
 
-        return flightDetailsRepository.findBySourceAndDestinationAndDepartDay(source, destination,departDay);
+        return flightDetailsRepository.findBySourceAndDestinationAndDepartDayAndClassType(source, destination,departDay, classType);
     }
 
     @Transactional

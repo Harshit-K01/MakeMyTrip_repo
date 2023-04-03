@@ -1,14 +1,11 @@
 package com.MakeMyTrip.springboot.mmt_project.rest;
 
-import com.MakeMyTrip.springboot.mmt_project.dao.FlightDetailsRepository;
-import com.MakeMyTrip.springboot.mmt_project.entity.FareDetail;
 import com.MakeMyTrip.springboot.mmt_project.entity.FlightDetail;
-import com.MakeMyTrip.springboot.mmt_project.service.FareDetailService;
 import com.MakeMyTrip.springboot.mmt_project.service.FlightDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +14,13 @@ import java.util.Optional;
 public class FlightDetailRestController {
 
     private FlightDetailService flightDetailService;
-    private FareDetailService fareDetailService;
 
     @Autowired
     public FlightDetailRestController(FlightDetailService theFlightDetailService){
         flightDetailService=theFlightDetailService;
     }
 
-    @GetMapping("/flights")
+    @GetMapping("/flightsAll")
     public List<FlightDetail> findAllFlights(){
         return flightDetailService.findAllFlights();
     }
@@ -40,9 +36,9 @@ public class FlightDetailRestController {
         return theFlightDetail;
     }
 
-    @GetMapping("/flights/{source}/{destination}/{departDay}/{classType}")
-    public List<FlightDetail> getFlight(@PathVariable String source, @PathVariable String destination, @PathVariable Date departDay){
-        List<FlightDetail> theFlight=flightDetailService.findFlight(source,destination,departDay);
+    @GetMapping("/flights")
+    public List<Object> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType){
+        List<Object> theFlight=flightDetailService.findFlight(source,destination,departDay,classType);
 
         if (theFlight==null){
             throw new RuntimeException("Flight not found");

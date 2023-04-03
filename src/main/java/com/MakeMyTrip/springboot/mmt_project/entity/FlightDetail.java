@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.sql.Time;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +23,16 @@ public class FlightDetail {
     private String airline;
 
     @Column(name="depart_day")
-    private Date departDay;
+    private LocalDate departDay;
 
     @Column(name="arrive_day")
-    private Date arriveDay;
+    private LocalDate arriveDay;
 
     @Column(name="depart_time")
-    private Time departTime;
+    private LocalTime departTime;
 
     @Column(name="arrive_time")
-    private Time arriveTime;
+    private LocalTime arriveTime;
 
     @Column(name="source")
     private String source;
@@ -47,7 +49,7 @@ public class FlightDetail {
 
     }
 
-    public FlightDetail(String airline, Date departDay, Date arriveDay, Time departTime, Time arriveTime, String source, String destination) {
+    public FlightDetail(String airline, LocalDate departDay, LocalDate arriveDay, LocalTime departTime, LocalTime arriveTime, String source, String destination) {
         this.airline = airline;
         this.departDay = departDay;
         this.arriveDay = arriveDay;
@@ -76,35 +78,35 @@ public class FlightDetail {
         this.airline = airline;
     }
 
-    public Date getDepartDay() {
+    public LocalDate getDepartDay() {
         return departDay;
     }
 
-    public void setDepartDay(Date departDay) {
+    public void setDepartDay(LocalDate departDay) {
         this.departDay = departDay;
     }
 
-    public Date getArriveDay() {
+    public LocalDate getArriveDay() {
         return arriveDay;
     }
 
-    public void setArriveDay(Date arriveDay) {
+    public void setArriveDay(LocalDate arriveDay) {
         this.arriveDay = arriveDay;
     }
 
-    public Time getDepartTime() {
+    public LocalTime getDepartTime() {
         return departTime;
     }
 
-    public void setDepartTime(Time departTime) {
+    public void setDepartTime(LocalTime departTime) {
         this.departTime = departTime;
     }
 
-    public Time getArriveTime() {
+    public LocalTime getArriveTime() {
         return arriveTime;
     }
 
-    public void setArriveTime(Time arriveTime) {
+    public void setArriveTime(LocalTime arriveTime) {
         this.arriveTime = arriveTime;
     }
 
