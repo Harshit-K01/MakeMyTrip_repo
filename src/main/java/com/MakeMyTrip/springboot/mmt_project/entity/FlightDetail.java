@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.sql.Time;
 import java.sql.Date;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,9 @@ public class FlightDetail {
     @Column(name="destination")
     private String destination;
 
+    @Column(name = "duration")
+    private long duration;
+
     @OneToMany
     private List<FareDetail> fareDetail= new ArrayList<>();
 
@@ -59,8 +64,8 @@ public class FlightDetail {
         this.destination = destination;
     }
 
-    // getters/setters
 
+    // getters/setters
 
     public int getFlightNumber() {
         return flightNumber;
@@ -124,6 +129,19 @@ public class FlightDetail {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public long getDuration() {
+        LocalDateTime departDate=LocalDateTime.of(departDay,departTime);
+        LocalDateTime arriveDate=LocalDateTime.of(arriveDay,arriveTime);
+        duration=Duration.between(departDate,arriveDate).toMinutes();
+        return duration;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void setDuration(){
+        this.duration=getDuration();
     }
 
     // toString() method

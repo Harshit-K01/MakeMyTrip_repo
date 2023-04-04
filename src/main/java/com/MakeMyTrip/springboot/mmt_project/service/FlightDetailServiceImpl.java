@@ -39,7 +39,9 @@ public class FlightDetailServiceImpl implements FlightDetailService{
     @Transactional
     @Override
     public FlightDetail saveFlight(FlightDetail theFlightDetail) {
+
         return flightDetailsRepository.save(theFlightDetail);
+
     }
 
     @Transactional
