@@ -1,5 +1,6 @@
 package com.MakeMyTrip.springboot.mmt_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Time;
@@ -45,8 +46,9 @@ public class FlightDetail {
     @Column(name = "duration")
     private long duration;
 
-    @OneToMany
-    private List<FareDetail> fareDetail= new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flightNumber")
+    @JsonManagedReference
+    private List<FareDetail> fareDetails;
 
 
     // constructor
@@ -142,6 +144,14 @@ public class FlightDetail {
     @PreUpdate
     public void setDuration(){
         this.duration=getDuration();
+    }
+
+    public List<FareDetail> getFareDetails() {
+        return fareDetails;
+    }
+
+    public void setFareDetails(List<FareDetail> fareDetails) {
+        this.fareDetails = fareDetails;
     }
 
     // toString() method

@@ -3,6 +3,7 @@ package com.MakeMyTrip.springboot.mmt_project.service;
 import com.MakeMyTrip.springboot.mmt_project.dao.FlightDetailsRepository;
 import com.MakeMyTrip.springboot.mmt_project.entity.FlightDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +32,32 @@ public class FlightDetailServiceImpl implements FlightDetailService{
     }
 
     @Override
-    public List<Object> findFlight(String source, String destination, LocalDate departDay, String classType) {
+    public List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType,String sortType) {
 
-        return flightDetailsRepository.findBySourceAndDestinationAndDepartDayAndClassType(source, destination,departDay, classType);
+        Sort sortByDuration=null;
+        Sort sortByFare= null;
+
+        if (sortType.equals("duration")){
+            sortByDuration=Sort.by("duration");
+        } else if (sortType.equals("fare")) {
+            sortByFare=Sort.by("fareDetails.fare");
+        }
+
+        Sort sendFilter=null;
+
+        if (sortByDuration != null){
+            sendFilter=sortByDuration;
+        } else if (sortByFare != null) {
+            sendFilter=sortByFare;
+        }
+
+        List<FlightDetail> flights=flightDetailsRepository.findBySourceAndDestinationAndDepartDay(source, destination,departDay,sendFilter);
+
+        for (FlightDetail flight : flights) {
+            flight.getFareDetails().removeIf(fareDetail -> !fareDetail.getClassType().equals(classType));
+        }
+
+        return flights;
     }
 
     @Transactional

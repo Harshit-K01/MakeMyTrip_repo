@@ -1,5 +1,6 @@
 package com.MakeMyTrip.springboot.mmt_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,8 +14,10 @@ public class FareDetail {
     @Column(name = "id")
     private int fareId;
 
-    @Column(name = "flight_number")
-    private int flightNumber;
+    @ManyToOne
+    @JoinColumn(name = "flight_number", nullable = false)
+    @JsonBackReference
+    private FlightDetail flightNumber;
 
     @Column(name = "class_type")
     private String classType;
@@ -23,13 +26,14 @@ public class FareDetail {
     private int fare;
 
 
+
     // constructor
 
     public FareDetail() {
 
     }
 
-    public FareDetail(int flightNumber, String classType, int fare) {
+    public FareDetail(FlightDetail flightNumber, String classType, int fare) {
         this.flightNumber = flightNumber;
         this.classType = classType;
         this.fare = fare;
@@ -38,11 +42,11 @@ public class FareDetail {
     // getters/setters
 
 
-    public int getFlightNumber() {
+    public FlightDetail getFlightNumber() {
         return flightNumber;
     }
 
-    public void setFlightNumber(int flightNumber) {
+    public void setFlightNumber(FlightDetail flightNumber) {
         this.flightNumber = flightNumber;
     }
 

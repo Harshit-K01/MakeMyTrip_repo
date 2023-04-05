@@ -12,7 +12,7 @@ public interface FlightDetailService {
 
     Optional<FlightDetail> findFlightById(int theId);
 
-    List<Object> findFlight(String source, String destination, LocalDate departDay, String classType);
+    List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType, String sortType);
 
     FlightDetail saveFlight(FlightDetail theFlightDetail);
 

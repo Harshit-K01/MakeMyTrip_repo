@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,15 +38,27 @@ public class FlightDetailRestController {
     }
 
     @GetMapping("/flights")
-    public List<Object> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType){
-        List<Object> theFlight=flightDetailService.findFlight(source,destination,departDay,classType);
+    public List<FlightDetail> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType,@RequestParam Boolean returnTrip,@RequestParam(required = false) LocalDate returnDate,@RequestParam(required = false, defaultValue = "null") String sortType){
 
-        if (theFlight==null){
+        List<FlightDetail> flights = new ArrayList<>();
+
+            List<FlightDetail> oneWayFlight=flightDetailService.findFlight(source,destination,departDay,classType,sortType);
+            flights.addAll(oneWayFlight);
+
+
+
+        if (returnTrip==true){
+
+            List<FlightDetail> returnFlight = flightDetailService.findFlight(destination, source, returnDate, classType,sortType);
+                flights.addAll(returnFlight);
+        }
+
+
+        if (flights==null){
             throw new RuntimeException("Flight not found");
         }
 
-        return theFlight;
-
+        return flights;
 
     }
     @PostMapping("/flights")
