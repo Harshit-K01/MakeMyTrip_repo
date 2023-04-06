@@ -154,8 +154,8 @@ public class FlightDetail {
         this.fareDetails = fareDetails;
     }
 
-    // toString() method
 
+    // toString() method
 
     @Override
     public String toString() {

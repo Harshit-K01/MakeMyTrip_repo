@@ -28,7 +28,6 @@ public class FareDetail {
 
 
     // constructor
-
     public FareDetail() {
 
     }
@@ -40,7 +39,6 @@ public class FareDetail {
     }
 
     // getters/setters
-
 
     public FlightDetail getFlightNumber() {
         return flightNumber;
@@ -74,8 +72,8 @@ public class FareDetail {
         this.fareId = fareId;
     }
 
-    // toString() method
 
+    // toString() method
 
     @Override
     public String toString() {

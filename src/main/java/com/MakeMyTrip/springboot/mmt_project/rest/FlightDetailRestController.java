@@ -16,18 +16,23 @@ public class FlightDetailRestController {
 
     private FlightDetailService flightDetailService;
 
+    // CONSTRUCTOR
     @Autowired
     public FlightDetailRestController(FlightDetailService theFlightDetailService){
         flightDetailService=theFlightDetailService;
     }
 
+
+    //API FOR FINDING ALL FLIGHTS
     @GetMapping("/flightsAll")
     public List<FlightDetail> findAllFlights(){
         return flightDetailService.findAllFlights();
     }
 
+    //API FOR FINDING FLIGHTS BY FLIGHT NUMBER
     @GetMapping("/flights/{flightNum}")
     public Optional<FlightDetail> getFlightDetail(@PathVariable int flightNum) {
+
         Optional<FlightDetail> theFlightDetail=flightDetailService.findFlightById(flightNum);
 
         if (theFlightDetail==null){
@@ -37,22 +42,21 @@ public class FlightDetailRestController {
         return theFlightDetail;
     }
 
+    //API FOR FETCHING FLIGHTS BASED ON PARAMS
     @GetMapping("/flights")
-    public List<FlightDetail> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType,@RequestParam Boolean returnTrip,@RequestParam(required = false) LocalDate returnDate,@RequestParam(required = false, defaultValue = "null") String sortType){
+    public List<FlightDetail> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType,@RequestParam Boolean returnTrip,@RequestParam(required = false) LocalDate returnDate,@RequestParam(required = false, defaultValue = "null") String sortType,@RequestParam(required = false, defaultValue = "null") String filterType){
 
         List<FlightDetail> flights = new ArrayList<>();
 
-            List<FlightDetail> oneWayFlight=flightDetailService.findFlight(source,destination,departDay,classType,sortType);
+        //LIST FOR ONE WAY FLIGHTS
+        List<FlightDetail> oneWayFlight=flightDetailService.findFlight(source,destination,departDay,classType,sortType,filterType);
             flights.addAll(oneWayFlight);
 
-
-
+        //LIST FOR RETURN TRIP FLIGHTS
         if (returnTrip==true){
-
-            List<FlightDetail> returnFlight = flightDetailService.findFlight(destination, source, returnDate, classType,sortType);
+            List<FlightDetail> returnFlight = flightDetailService.findFlight(destination, source, returnDate, classType,sortType,filterType);
                 flights.addAll(returnFlight);
         }
-
 
         if (flights==null){
             throw new RuntimeException("Flight not found");
@@ -61,23 +65,26 @@ public class FlightDetailRestController {
         return flights;
 
     }
+
+    //API FOR ADDING FLIGHTS
     @PostMapping("/flights")
     public FlightDetail addFlight(@RequestBody FlightDetail theFlightDetail){
 
         theFlightDetail.setFlightNumber(0);
-
         FlightDetail dbFlight=flightDetailService.saveFlight(theFlightDetail);
-
         return dbFlight;
     }
 
+    //API FOR UPDATING FLIGHTS
     @PutMapping("/flights")
     public FlightDetail updateFlightDetail(@RequestBody FlightDetail theFlightDetail){
-        FlightDetail dbFlightDetail=flightDetailService.saveFlight(theFlightDetail);
 
+        FlightDetail dbFlightDetail=flightDetailService.saveFlight(theFlightDetail);
         return dbFlightDetail;
+
     }
 
+    //API FOR DELETING FLIGHT
     @DeleteMapping("/flights/{flightNumber}")
     public String deleteFLight(@PathVariable int flightNumber){
 
@@ -88,7 +95,6 @@ public class FlightDetailRestController {
         }
 
         flightDetailService.deleteFlightById(flightNumber);
-
         return "Deleted flight number - " + flightNumber;
 
     }

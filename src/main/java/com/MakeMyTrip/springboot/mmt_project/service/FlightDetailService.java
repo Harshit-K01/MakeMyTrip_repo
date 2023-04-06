@@ -8,11 +8,12 @@ import java.util.Optional;
 
 public interface FlightDetailService {
 
+
     List<FlightDetail> findAllFlights();
 
     Optional<FlightDetail> findFlightById(int theId);
 
-    List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType, String sortType);
+    List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType, String sortType,String filterType);
 
     FlightDetail saveFlight(FlightDetail theFlightDetail);
 

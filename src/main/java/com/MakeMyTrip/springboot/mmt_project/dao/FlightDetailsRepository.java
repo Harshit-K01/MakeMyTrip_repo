@@ -8,12 +8,16 @@ import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface FlightDetailsRepository extends JpaRepository<FlightDetail, Integer> {
 
-    //    @Query("Select f.flightNumber, f.airline, f.arriveDay,f.departDay,f.departTime,f.arriveTime,f.source,f.destination, fd.classType, fd.fare,f.duration from FlightDetail f, FareDetail fd where f.flightNumber=fd.flightNumber and f.source=?1 and f.destination=?2 and f.departDay=?3 and fd.classType=?4 ")
+    //METHOD FOR FETCHING FLIGHTS
     List<FlightDetail> findBySourceAndDestinationAndDepartDay(String source, String destination, LocalDate departDay, Sort sort);
+
+    //METHOD FOR FETCHING FLIGHTS BY FILTERING
+    List<FlightDetail> findBySourceAndDestinationAndDepartDayAndDepartTimeBetween(String source, String destination, LocalDate departDay, LocalTime start,LocalTime end, Sort sort);
 }
 
 

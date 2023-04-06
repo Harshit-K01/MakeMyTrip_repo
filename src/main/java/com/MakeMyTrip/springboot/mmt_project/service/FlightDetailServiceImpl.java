@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,11 +34,19 @@ public class FlightDetailServiceImpl implements FlightDetailService{
     }
 
     @Override
-    public List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType,String sortType) {
+    public List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType,String sortType,String filterType) {
 
+        List<FlightDetail> flights=new ArrayList<>();
+
+        //DEFAULT START AND END TIME
+        LocalTime start=null;
+        LocalTime end=null;
+
+        //DEFAULT SORTBY TYPE
         Sort sortByDuration=null;
         Sort sortByFare= null;
 
+        //SORTING LOGIC
         if (sortType.equals("duration")){
             sortByDuration=Sort.by("duration");
         } else if (sortType.equals("fare")) {
@@ -51,13 +61,31 @@ public class FlightDetailServiceImpl implements FlightDetailService{
             sendFilter=sortByFare;
         }
 
-        List<FlightDetail> flights=flightDetailsRepository.findBySourceAndDestinationAndDepartDay(source, destination,departDay,sendFilter);
+        //LIST OF FLIGHTS WITHOUT ANY FILTERING
+        flights=flightDetailsRepository.findBySourceAndDestinationAndDepartDay(source, destination,departDay,sendFilter);
 
+        //FILTERING LOGIC FOR MORNING AND LATE DEPARTURES
+        if (filterType.equals("Morning departure")){
+
+            start=LocalTime.of(5,0);
+            end=LocalTime.of(12,0);
+            flights=flightDetailsRepository.findBySourceAndDestinationAndDepartDayAndDepartTimeBetween(source, destination,departDay,start,end,sendFilter);
+
+        } else if (filterType.equals("Late departure")) {
+
+            start=LocalTime.of(18,0);
+            end=LocalTime.of(23,59);
+            flights=flightDetailsRepository.findBySourceAndDestinationAndDepartDayAndDepartTimeBetween(source, destination,departDay,start,end,sendFilter);
+
+        }
+
+        //LOGIC FOR REMOVING UNNECESSARY CLASSTYPE FROM FLIGHTS
         for (FlightDetail flight : flights) {
             flight.getFareDetails().removeIf(fareDetail -> !fareDetail.getClassType().equals(classType));
         }
 
         return flights;
+
     }
 
     @Transactional
