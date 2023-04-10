@@ -1,5 +1,6 @@
 package com.MakeMyTrip.springboot.mmt_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class FlightDetail {
 
     // fields
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="flight_number")
@@ -44,7 +46,7 @@ public class FlightDetail {
     private String destination;
 
     @Column(name = "duration")
-    private long duration;
+    private Long duration;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flightNumber")
     @JsonManagedReference
@@ -133,7 +135,7 @@ public class FlightDetail {
         this.destination = destination;
     }
 
-    public long getDuration() {
+    public Long getDuration() {
         LocalDateTime departDate=LocalDateTime.of(departDay,departTime);
         LocalDateTime arriveDate=LocalDateTime.of(arriveDay,arriveTime);
         duration=Duration.between(departDate,arriveDate).toMinutes();

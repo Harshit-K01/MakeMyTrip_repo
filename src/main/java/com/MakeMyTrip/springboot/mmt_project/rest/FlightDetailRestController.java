@@ -1,5 +1,6 @@
 package com.MakeMyTrip.springboot.mmt_project.rest;
 
+import com.MakeMyTrip.springboot.mmt_project.dto.FlightDetailDTO;
 import com.MakeMyTrip.springboot.mmt_project.entity.FlightDetail;
 import com.MakeMyTrip.springboot.mmt_project.service.FlightDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,17 +45,17 @@ public class FlightDetailRestController {
 
     //API FOR FETCHING FLIGHTS BASED ON PARAMS
     @GetMapping("/flights")
-    public List<FlightDetail> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType,@RequestParam Boolean returnTrip,@RequestParam(required = false) LocalDate returnDate,@RequestParam(required = false, defaultValue = "null") String sortType,@RequestParam(required = false, defaultValue = "null") String filterType){
+    public List<FlightDetailDTO> getFlight(@RequestParam String source, @RequestParam String destination, @RequestParam LocalDate departDay, @RequestParam String classType, @RequestParam Boolean returnTrip, @RequestParam(required = false) LocalDate returnDate, @RequestParam(required = false, defaultValue = "null") String sortType, @RequestParam(required = false, defaultValue = "null") String filterType){
 
-        List<FlightDetail> flights = new ArrayList<>();
+        List<FlightDetailDTO> flights = new ArrayList<>();
 
         //LIST FOR ONE WAY FLIGHTS
-        List<FlightDetail> oneWayFlight=flightDetailService.findFlight(source,destination,departDay,classType,sortType,filterType);
+        List<FlightDetailDTO> oneWayFlight=flightDetailService.findFlight(source,destination,departDay,classType,sortType,filterType);
             flights.addAll(oneWayFlight);
 
         //LIST FOR RETURN TRIP FLIGHTS
         if (returnTrip==true){
-            List<FlightDetail> returnFlight = flightDetailService.findFlight(destination, source, returnDate, classType,sortType,filterType);
+            List<FlightDetailDTO> returnFlight = flightDetailService.findFlight(destination, source, returnDate, classType,sortType,filterType);
                 flights.addAll(returnFlight);
         }
 

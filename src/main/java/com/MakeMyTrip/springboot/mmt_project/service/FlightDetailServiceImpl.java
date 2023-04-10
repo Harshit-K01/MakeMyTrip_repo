@@ -1,6 +1,9 @@
 package com.MakeMyTrip.springboot.mmt_project.service;
 
 import com.MakeMyTrip.springboot.mmt_project.dao.FlightDetailsRepository;
+import com.MakeMyTrip.springboot.mmt_project.dto.FlightDetailDTO;
+import com.MakeMyTrip.springboot.mmt_project.dto.FlightDetailDTOMapper;
+import com.MakeMyTrip.springboot.mmt_project.entity.FareDetail;
 import com.MakeMyTrip.springboot.mmt_project.entity.FlightDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,15 +15,18 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightDetailServiceImpl implements FlightDetailService{
 
     private FlightDetailsRepository flightDetailsRepository;
+    private final FlightDetailDTOMapper flightDetailDTOMapper;
 
     @Autowired
-    public FlightDetailServiceImpl(FlightDetailsRepository theflightDetailsRepository){
+    public FlightDetailServiceImpl(FlightDetailsRepository theflightDetailsRepository, FlightDetailDTOMapper flightDetailDTOMapper){
         flightDetailsRepository=theflightDetailsRepository;
+        this.flightDetailDTOMapper = flightDetailDTOMapper;
     }
 
     @Override
@@ -34,7 +40,7 @@ public class FlightDetailServiceImpl implements FlightDetailService{
     }
 
     @Override
-    public List<FlightDetail> findFlight(String source, String destination, LocalDate departDay, String classType,String sortType,String filterType) {
+    public List<FlightDetailDTO> findFlight(String source, String destination, LocalDate departDay, String classType, String sortType, String filterType) {
 
         List<FlightDetail> flights=new ArrayList<>();
 
@@ -84,7 +90,12 @@ public class FlightDetailServiceImpl implements FlightDetailService{
             flight.getFareDetails().removeIf(fareDetail -> !fareDetail.getClassType().equals(classType));
         }
 
-        return flights;
+
+
+        return flights
+                .stream()
+                .map(flightDetailDTOMapper)
+                .collect(Collectors.toList());
 
     }
 
