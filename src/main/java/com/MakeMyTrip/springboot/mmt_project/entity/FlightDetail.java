@@ -21,25 +21,25 @@ public class FlightDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="flight_number")
     private int flightNumber;
-    @NotEmpty
+    @NotEmpty(message = "airline cannot be empty")
     @Column
     private String airline;
-    @NotNull
+    @NotNull(message="departure date cannot be empty")
     @Column(name="depart_day")
     private LocalDate departDay;
-    @NotNull
+    @NotNull(message = "arrival date cannot be empty")
     @Column(name="arrive_day")
     private LocalDate arriveDay;
-    @NotNull
+    @NotNull(message="departure time cannot be empty")
     @Column(name="depart_time")
     private LocalTime departTime;
-    @NotNull
+    @NotNull(message = "arrival time cannot be empty")
     @Column(name="arrive_time")
     private LocalTime arriveTime;
-    @NotEmpty
+    @NotEmpty(message = "please enter the source")
     @Column
     private String source;
-    @NotEmpty
+    @NotEmpty(message = "please enter the destination")
     @Column
     private String destination;
     @Column

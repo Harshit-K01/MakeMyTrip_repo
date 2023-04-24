@@ -2,6 +2,7 @@ package com.MakeMyTrip.springboot.mmt_project.rest;
 
 import com.MakeMyTrip.springboot.mmt_project.entity.FareDetail;
 import com.MakeMyTrip.springboot.mmt_project.service.FareDetailService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class FareDetailRestController {
 
     //API FOR ADDING FARE
     @PostMapping("/fares")
-    public FareDetail addFare(@RequestBody FareDetail theFareDetail){
+    public FareDetail addFare(@Valid @RequestBody FareDetail theFareDetail){
 
         theFareDetail.setId(0);
         FareDetail dbFare=fareDetailService.saveFare(theFareDetail);

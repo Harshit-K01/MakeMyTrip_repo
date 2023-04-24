@@ -2,6 +2,7 @@ package com.MakeMyTrip.springboot.mmt_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -14,14 +15,23 @@ public class UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int userId;
+    @NotEmpty(message = "firstname cannot be empty")
     @Column(name = "first_name")
     private String firstName;
+
+    @NotEmpty(message = "lastname cannot be empty")
     @Column(name = "last_name")
     private String lastName;
+
+    @NotEmpty(message = "phone number cannot be empty")
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @NotEmpty(message = "email id cannot be empty")
     @Column(name = "email_id")
     private String emailId;
+
+    @NotEmpty(message = "gender cannot be empty")
     @Column
     private String gender;
     @OneToMany(mappedBy = "user",cascade =CascadeType.ALL )

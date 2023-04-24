@@ -40,7 +40,7 @@ public class FlightDetailRestController {
 
     //API FOR FETCHING FLIGHTS BASED ON PARAMS
     @GetMapping("/flights")
-    public List<FlightDetailDTO> getFlights(@RequestParam String source,
+    public List<FlightDetailDTO> getFlights(@Valid @RequestParam String source,
                                            @RequestParam String destination,
                                            @RequestParam LocalDate departDay,
                                            @RequestParam String classType,

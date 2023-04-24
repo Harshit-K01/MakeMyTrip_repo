@@ -4,6 +4,7 @@ import com.MakeMyTrip.springboot.mmt_project.dto.BookingDetailDTO;
 import com.MakeMyTrip.springboot.mmt_project.dto.ShowBookingsDTO;
 import com.MakeMyTrip.springboot.mmt_project.entity.BookingDetails;
 import com.MakeMyTrip.springboot.mmt_project.service.BookingDetailService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class BookingDetailRestController {
 
     //API FOR ADDING BOOKING
     @PostMapping("/booking")
-    public String addBooking(@RequestBody BookingDetailDTO bookingDetailDTO){
+    public String addBooking(@Valid @RequestBody BookingDetailDTO bookingDetailDTO){
         bookingDetailService.saveBooking(bookingDetailDTO);
         return "booking saved successfully";
 
@@ -29,7 +30,7 @@ public class BookingDetailRestController {
 
 //    API FOR SHOWING ALL/FLIGHT NUMBER SPECIFIC/EMAIL ID SPECIFIC BOOKINGS
     @GetMapping("/booking")
-    public List<ShowBookingsDTO> findBooking(@RequestParam(required = false) String emailId,
+    public List<ShowBookingsDTO> findBooking(@Valid @RequestParam(required = false) String emailId,
                                              @RequestParam(required = false) Integer flightNumber,
                                              @RequestParam(required = false,defaultValue = "0") Integer pageNumber,
                                              @RequestParam(required = false,defaultValue = "2") Integer pageSize,
@@ -47,7 +48,7 @@ public class BookingDetailRestController {
     }
 
     //API FOR DELETING/CANCELLING A BOOKING
-    @DeleteMapping("/booking/{booking-Id}")
+    @DeleteMapping("/booking/{bookingId}")
     public String cancelBooking(@PathVariable int bookingId){
         BookingDetails tempBooking=bookingDetailService.findBookingById(bookingId);
 

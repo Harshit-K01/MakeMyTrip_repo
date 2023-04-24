@@ -3,6 +3,7 @@ package com.MakeMyTrip.springboot.mmt_project.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class FareDetail {
     @JsonManagedReference(value="booking-details")
     private List<BookingDetails> fareBookingDetails;
 
+    @NotEmpty(message = "class type cannot be empty")
     @Column(name = "class_type")
     private String classType;
 
+    @NotEmpty(message = "fare cannot be empty")
     @Column
     private int fare;
 
