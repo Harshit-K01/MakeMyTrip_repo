@@ -1,64 +1,59 @@
 package com.MakeMyTrip.springboot.mmt_project.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-import java.sql.Time;
-import java.sql.Date;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="flight_details")
 public class FlightDetail {
 
-    // fields
-
+    // FIELDS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="flight_number")
     private int flightNumber;
-
-    @Column(name="airline")
+    @NotEmpty
+    @Column
     private String airline;
-
+    @NotNull
     @Column(name="depart_day")
     private LocalDate departDay;
-
+    @NotNull
     @Column(name="arrive_day")
     private LocalDate arriveDay;
-
+    @NotNull
     @Column(name="depart_time")
     private LocalTime departTime;
-
+    @NotNull
     @Column(name="arrive_time")
     private LocalTime arriveTime;
-
-    @Column(name="source")
+    @NotEmpty
+    @Column
     private String source;
-
-    @Column(name="destination")
+    @NotEmpty
+    @Column
     private String destination;
-
-    @Column(name = "duration")
+    @Column
     private Long duration;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flightNumber")
     @JsonManagedReference
     private List<FareDetail> fareDetails;
 
-
-    // constructor
+    // CONSTRUCTORS
     public FlightDetail(){
 
     }
 
-    public FlightDetail(String airline, LocalDate departDay, LocalDate arriveDay, LocalTime departTime, LocalTime arriveTime, String source, String destination) {
+    public FlightDetail( String airline, LocalDate departDay, LocalDate arriveDay, LocalTime departTime, LocalTime arriveTime, String source, String destination) {
         this.airline = airline;
         this.departDay = departDay;
         this.arriveDay = arriveDay;
@@ -69,7 +64,7 @@ public class FlightDetail {
     }
 
 
-    // getters/setters
+    // GETTERS/SETTERS
 
     public int getFlightNumber() {
         return flightNumber;
@@ -136,16 +131,15 @@ public class FlightDetail {
     }
 
     public Long getDuration() {
-        LocalDateTime departDate=LocalDateTime.of(departDay,departTime);
-        LocalDateTime arriveDate=LocalDateTime.of(arriveDay,arriveTime);
-        duration=Duration.between(departDate,arriveDate).toMinutes();
         return duration;
     }
 
     @PrePersist
-    @PreUpdate
     public void setDuration(){
-        this.duration=getDuration();
+        LocalDateTime departDate=LocalDateTime.of(departDay,departTime);
+        LocalDateTime arriveDate=LocalDateTime.of(arriveDay,arriveTime);
+        this.duration=Duration.between(departDate,arriveDate).toMinutes();
+
     }
 
     public List<FareDetail> getFareDetails() {
@@ -155,7 +149,6 @@ public class FlightDetail {
     public void setFareDetails(List<FareDetail> fareDetails) {
         this.fareDetails = fareDetails;
     }
-
 
     // toString() method
 

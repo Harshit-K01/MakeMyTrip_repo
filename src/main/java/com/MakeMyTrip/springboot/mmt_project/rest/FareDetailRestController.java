@@ -3,13 +3,14 @@ package com.MakeMyTrip.springboot.mmt_project.rest;
 import com.MakeMyTrip.springboot.mmt_project.entity.FareDetail;
 import com.MakeMyTrip.springboot.mmt_project.service.FareDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/fare_api")
+@RequestMapping("/fare-api")
 public class FareDetailRestController {
 
     private FareDetailService fareDetailService;
@@ -27,12 +28,12 @@ public class FareDetailRestController {
     }
 
     //API FOR GETTING FARE DETAILS
-    @GetMapping("/fares/{fareId}")
-    public Optional<FareDetail> getFareDetail(@PathVariable int fareId) {
+    @GetMapping("/fares/{fare-Id}")
+    public FareDetail getFareDetail(@PathVariable int fareId) {
 
-        Optional<FareDetail> theFareDetail=fareDetailService.findFareById(fareId);
+        FareDetail theFareDetail=fareDetailService.findFareById(fareId);
 
-        if (theFareDetail==null){
+        if (ObjectUtils.isEmpty(theFareDetail)){
             throw new RuntimeException("Fare Id not found -"+ fareId);
         }
 
@@ -58,12 +59,12 @@ public class FareDetailRestController {
     }
 
     //API FOR DELETING FARE
-    @DeleteMapping("/fares/{fareId}")
+    @DeleteMapping("/fares/{fare-Id}")
     public String deleteFare(@PathVariable int fareId){
 
-        Optional<FareDetail> tempFare=fareDetailService.findFareById(fareId);
+        FareDetail tempFare=fareDetailService.findFareById(fareId);
 
-        if (tempFare==null) {
+        if (ObjectUtils.isEmpty(tempFare)) {
             throw new RuntimeException("Fare Id not found -"+ fareId);
         }
 

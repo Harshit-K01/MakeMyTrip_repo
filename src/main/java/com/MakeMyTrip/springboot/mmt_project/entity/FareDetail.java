@@ -1,8 +1,10 @@
 package com.MakeMyTrip.springboot.mmt_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="fare_details")
@@ -20,10 +22,14 @@ public class FareDetail {
     @JsonBackReference
     private FlightDetail flightNumber;
 
+    @OneToMany(mappedBy = "fare",cascade = CascadeType.ALL)
+    @JsonManagedReference(value="booking-details")
+    private List<BookingDetails> fareBookingDetails;
+
     @Column(name = "class_type")
     private String classType;
 
-    @Column(name = "fare")
+    @Column
     private int fare;
 
 
@@ -33,13 +39,22 @@ public class FareDetail {
 
     }
 
-    public FareDetail(FlightDetail flightNumber, String classType, int fare) {
+    public FareDetail(FlightDetail flightNumber, List<BookingDetails> fareBookingDetails, String classType, int fare) {
         this.flightNumber = flightNumber;
+        this.fareBookingDetails = fareBookingDetails;
         this.classType = classType;
         this.fare = fare;
     }
 
     // getters/setters
+
+    public List<BookingDetails> getFareBookingDetails() {
+        return fareBookingDetails;
+    }
+
+    public void setFareBookingDetails(List<BookingDetails> fareBookingDetails) {
+        this.fareBookingDetails = fareBookingDetails;
+    }
 
     public FlightDetail getFlightNumber() {
         return flightNumber;
